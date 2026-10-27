@@ -29,6 +29,7 @@
     "targets": "all",
     "category": "Utility",
     "shortDescription": "Security audit and system health",
-    "longDescription": "Read-only system inventory and evidence-based security and optimization recommendations."
+    "longDescription": "Read-only system inventory and evidence-based security and optimization recommendations.",
+    "icon": []
   }
 }
