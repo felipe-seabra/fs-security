@@ -1,6 +1,6 @@
-# Optimization policy
+# Miner cleanup and system optimization policy
 
-FS Security aims to improve security, reliability, and responsiveness without unsafe “debloating” or unsupported performance promises.
+FS Security aims to detect signs of hidden cryptocurrency miners, help users review safe cleanup options, and improve responsiveness without unsafe “debloating” or unsupported performance promises. It is not a full antivirus.
 
 ## Profiles
 
@@ -10,7 +10,7 @@ Optimize for consistent frame times and fewer avoidable background interruptions
 ### Everyday
 Optimize for reliability, responsive multitasking, security hygiene, reasonable startup load, update status, disk headroom, and privacy settings.
 
-Both profiles use the same safety requirements. A profile changes recommendation ranking, not the user's consent requirements.
+Both profiles use the same safety requirements. A profile changes recommendation ranking, not the user's consent requirements. A miner finding must be shown separately from ordinary performance advice, with evidence and confidence, and must never trigger automatic removal.
 
 ## Required fields for every recommendation
 
