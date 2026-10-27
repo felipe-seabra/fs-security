@@ -88,6 +88,34 @@ fn run_read_only_audit() -> AuditReport {
         .collect::<Vec<_>>();
 
     let mut findings = Vec::new();
+
+    // Conservative heuristic: flag known miner executable names and explicit
+    // mining-protocol command lines for human review. This is not a malware verdict.
+    for (pid, process) in system.processes() {
+        let process_name = process.name().to_string_lossy().into_owned();
+        let executable = process.exe().map(|path| path.display().to_string());
+        let command_line = process
+            .cmd()
+            .iter()
+            .map(|part| part.to_string_lossy())
+            .collect::<Vec<_>>()
+            .join(" ");
+
+        if let Some(evidence) = mining_indicator(&process_name, executable.as_deref(), &command_line) {
+            findings.push(AuditFinding {
+                id: format!("possible-miner-{}", pid.as_u32()),
+                category: "Possible mining software".to_string(),
+                severity: "medium".to_string(),
+                title: format!("Possível software de mineração: {}", process_name),
+                details: format!(
+                    "{}. Este indicador é heurístico e não confirma infecção; softwares de mineração instalados intencionalmente também podem corresponder.",
+                    evidence
+                ),
+                recommendation: "Revise o caminho, a origem, a assinatura do editor e se você reconhece este software. Nenhum processo foi encerrado e nenhum arquivo foi removido.".to_string(),
+            });
+        }
+    }
+
     for disk in &disks {
         if disk.total_bytes > 0 && disk.available_percent < 10.0 {
             findings.push(AuditFinding {
@@ -124,12 +152,55 @@ fn run_read_only_audit() -> AuditReport {
         disks,
         notes: vec![
             "Esta versão coleta apenas um inventário básico de processos e armazenamento.".to_string(),
-            "Nenhuma análise de assinatura, persistência, rede ou malware foi executada.".to_string(),
+            "A detecção de mineração é heurística e limitada a nomes conhecidos e alguns padrões explícitos de linha de comando.".to_string(),
+            "Ainda não há verificação de assinatura, inventário de persistência ou análise abrangente de conexões de rede.".to_string(),
             "Os processos com maior uso de CPU não são classificados como malware.".to_string(),
             "Nenhuma configuração foi alterada e nenhum arquivo foi removido.".to_string(),
         ],
         findings,
     }
+}
+
+fn mining_indicator(name: &str, executable: Option<&str>, command_line: &str) -> Option<String> {
+    let known_names = [
+        "xmrig", "minerd", "cpuminer", "cpuminer-opt", "lolminer", "t-rex",
+        "trex", "gminer", "nbminer", "phoenixminer", "teamredminer",
+        "nanominer", "wildrig", "rigel", "bminer", "ethminer", "claymore",
+        "srbminer", "cryptodredge", "kawpowminer",
+    ];
+
+    let name_lower = name.to_ascii_lowercase();
+    let executable_stem = executable
+        .and_then(|path| std::path::Path::new(path).file_stem())
+        .and_then(|stem| stem.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+
+    if let Some(matched) = known_names
+        .iter()
+        .find(|candidate| name_lower == **candidate || executable_stem == **candidate)
+    {
+        return Some(format!(
+            "O nome do processo ou executável corresponde ao indicador conhecido '{}'",
+            matched
+        ));
+    }
+
+    let cmd = command_line.to_ascii_lowercase();
+    let has_stratum = cmd.contains("stratum+tcp://") || cmd.contains("stratum+ssl://");
+    let has_mining_arguments = cmd.contains("--pool")
+        || cmd.contains("--url")
+        || cmd.contains(" -o ")
+        || cmd.contains("--user")
+        || cmd.contains("--wallet");
+
+    if has_stratum && has_mining_arguments {
+        return Some(
+            "A linha de comando contém um protocolo Stratum e argumentos associados a pool/conta; isso também pode ter usos legítimos".to_string()
+        );
+    }
+
+    None
 }
 
 pub fn run() {
