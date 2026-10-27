@@ -209,3 +209,50 @@ pub fn run() {
         .run(tauri::generate_context!())
         .expect("erro ao executar FS Security");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::mining_indicator;
+
+    #[test]
+    fn flags_known_miner_process_name_case_insensitively() {
+        let result = mining_indicator("XMRig", None, "");
+        assert!(result.is_some());
+        assert!(result.unwrap().contains("xmrig"));
+    }
+
+    #[test]
+    fn flags_known_miner_executable_path() {
+        let result = mining_indicator("worker", Some("/opt/tools/cpuminer-opt"), "");
+        assert!(result.is_some());
+        assert!(result.unwrap().contains("cpuminer-opt"));
+    }
+
+    #[test]
+    fn flags_stratum_pool_command_line_for_review() {
+        let result = mining_indicator(
+            "worker",
+            Some("/tmp/worker"),
+            "worker --url stratum+tcp://pool.example:3333 --user example-wallet",
+        );
+        assert!(result.is_some());
+        assert!(result.unwrap().contains("Stratum"));
+    }
+
+    #[test]
+    fn does_not_flag_common_legitimate_process_by_name_alone() {
+        assert!(mining_indicator("steam", Some("/usr/bin/steam"), "").is_none());
+        assert!(mining_indicator("WindowServer", None, "").is_none());
+        assert!(mining_indicator("explorer", Some("C:\\Windows\\explorer.exe"), "").is_none());
+    }
+
+    #[test]
+    fn does_not_flag_stratum_text_without_mining_arguments() {
+        assert!(mining_indicator("browser", None, "example mentions stratum+tcp:// in a help page").is_none());
+    }
+
+    #[test]
+    fn does_not_flag_pool_argument_without_stratum_protocol() {
+        assert!(mining_indicator("app", None, "app --pool local-cache").is_none());
+    }
+}
