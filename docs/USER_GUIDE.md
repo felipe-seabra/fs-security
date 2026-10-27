@@ -1,8 +1,8 @@
-# User guide: install, scan, review, and optimize
+# User guide: install, scan for hidden miners, review cleanup, and optimize
 
 ## Current availability
 
-FS Security is in early development. The repository currently contains a UI prototype and project scaffolding, **not a working malware scanner or optimizer**. No official `.exe` or `.dmg` installer is available yet. Do not use this prototype to make security decisions or apply system changes.
+FS Security is in early development. It is intended as a miner-focused scanner and cleanup assistant, not a full antivirus. The current version performs a limited local inventory and basic heuristic checks for possible mining software; it is not a comprehensive scanner and cannot guarantee that a device is clean. No official `.exe` or `.dmg` installer is available yet.
 
 This guide documents the intended workflow for future verified releases and explains how to run the prototype as a developer.
 
@@ -30,7 +30,7 @@ The intended first-run flow is:
 2. Select **Read-only audit**.
 3. Choose the areas to inspect. The app should disclose any permission or coverage limitations.
 4. Start the scan and allow it to finish. Do not close the app while a scan is running.
-5. Review the summary and open findings individually.
+5. Review the summary and open findings individually. A possible-miner result is a heuristic lead, not proof: check the executable path, publisher/signature, installation source, and whether you intentionally installed mining software.
 6. Export the report if needed, storing it privately. Reports may contain usernames, file paths, process names, and network metadata.
 
 A scan is an assessment, not a guarantee that the device is malware-free.
@@ -64,7 +64,7 @@ Recommendations may cover:
 - identifying overlays or capture tools that may add overhead;
 - checking CPU, memory, disk and GPU pressure where supported.
 
-The app must explain trade-offs. It must not automatically disable antivirus, firewall, OS updates, backups, accessibility services, or unknown services. Power and performance changes should be optional, reversible, and supported by the current OS.
+The app must explain trade-offs. It must not automatically disable antivirus, firewall, OS updates, backups, accessibility services, or unknown services. Cleanup actions are not yet implemented; the current prototype does not kill processes, quarantine files, or remove persistence. Power and performance changes should be optional, reversible, and supported by the current OS.
 
 ### Everyday use
 
