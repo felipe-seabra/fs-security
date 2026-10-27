@@ -8,10 +8,12 @@ This roadmap is aspirational; completed items are marked only when present in th
 - [x] User guide, audit scope, and optimization policy
 - [ ] Validate initial build and native Tauri configuration
 
-## Phase 1 — Read-only baseline
-- [ ] Windows and macOS system inventory
+## Phase 1 — Read-only miner-focused baseline
+- [x] Basic process and disk inventory (initial prototype; limited coverage)
+- [ ] Windows and macOS platform-specific system inventory
 - [ ] Platform capability/permission report
-- [ ] Process and resource snapshots
+- [x] Process and resource snapshot (initial prototype)
+- [ ] Miner process-name and command-line heuristics with test fixtures
 - [ ] Startup and persistence inventory
 - [ ] Disk-space and update-status checks
 - [ ] Local JSON/HTML report export
@@ -19,7 +21,7 @@ This roadmap is aspirational; completed items are marked only when present in th
 
 ## Phase 2 — Security audit
 - [ ] Signature and publisher evidence where supported
-- [ ] Suspicious file metadata and hash collection
+- [ ] Suspicious file metadata and hash collection focused on miner artifacts
 - [ ] Network listener and owning-process context
 - [ ] Firewall and native protection posture
 - [ ] Evidence classes, confidence and severity separated
@@ -31,7 +33,7 @@ This roadmap is aspirational; completed items are marked only when present in th
 - [ ] Benefit/risk/reversibility card for each recommendation
 - [ ] No-op preview mode and measurable baseline
 
-## Phase 4 — Controlled remediation
+## Phase 4 — Controlled cleanup and remediation
 - [ ] Itemized, explicit user approval
 - [ ] Least-privilege elevation only when required
 - [ ] Backup/quarantine and rollback model
