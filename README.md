@@ -1,8 +1,8 @@
 # FS Security
 
-**Local-first system security auditing and optimization for Windows and macOS.**
+**Local-first suspicious-miner scanning, system cleanup guidance, and optimization for Windows and macOS.**
 
-FS Security is an open-source desktop application being developed to help people understand system security, startup behaviour, performance bottlenecks, and safe optimization opportunities—with evidence, plain-language explanations, and explicit user approval before any system change.
+FS Security is an open-source desktop tool being developed to look for signs of hidden cryptocurrency-mining software, explain suspicious processes and persistence mechanisms, and help users review cleanup and performance recommendations. It is not intended to be a full antivirus product.
 
 > [!WARNING]
 > **Early development — not ready for production use.** The current repository is a prototype. Real system scanning, malware detection, remediation, optimization actions, and signed installers are not yet implemented. Do not rely on this project to detect or remove malware, and do not run it with administrator/root privileges.
@@ -11,7 +11,7 @@ FS Security is an open-source desktop application being developed to help people
 
 - **Security audit:** review processes, startup and persistence locations, suspicious files, network listeners/connections, system protections, and update status.
 - **Evidence before labels:** distinguish observed facts, heuristics, and confirmed threats. An unsigned app, unfamiliar process, or open port is not automatically malware.
-- **System health:** identify update, storage, startup-load, resource-usage, and configuration issues that may affect reliability or performance.
+- **Cleanup review:** classify findings as likely safe to ignore, investigate, or potentially removable—with the evidence and risk explained before the user chooses.
 - **Two optimization profiles:** recommendations for **Gaming** and **Everyday use**, with a clear explanation of trade-offs.
 - **User-controlled changes:** show the exact target, expected benefit, risks, reversibility, and verification steps. Never apply changes silently.
 - **Verification:** rescan affected areas and report whether a change worked.
@@ -33,7 +33,7 @@ FS Security is an open-source desktop application being developed to help people
 | Everyday use | Startup simplicity, disk headroom, update hygiene, resource use, privacy-relevant settings and reliability |
 | Reports | Findings, evidence, confidence, impact, recommended next step and post-change verification |
 
-These are product goals, **not a claim that every check is currently available**. See [the roadmap](docs/ROADMAP.md) and [audit scope](docs/SCAN_SCOPE.md).
+These are product goals, **not a claim that every check is currently available**. The current miner indicator is a conservative heuristic and can miss renamed or obfuscated miners, while legitimate mining software can be flagged. See [the roadmap](docs/ROADMAP.md) and [audit scope](docs/SCAN_SCOPE.md).
 
 ## Safety model
 
