@@ -1,6 +1,6 @@
-# Audit scope and evidence model
+# Miner-focused scan scope and evidence model
 
-This document describes intended coverage. It is not a claim that the current prototype implements these checks.
+This document describes intended coverage. It is not a claim that the current prototype implements every check. The initial implementation includes only conservative process-name and command-line heuristics for possible mining software plus basic disk-space checks.
 
 ## Collection principles
 
@@ -21,11 +21,12 @@ This document describes intended coverage. It is not a claim that the current pr
 - Last known update status only when reliably accessible.
 - Scan coverage and required permissions.
 
-### 2. Processes and resource usage
+### 2. Processes and miner indicators
 - Process name, PID, parent PID where available, executable path and owner.
 - CPU/memory usage snapshots, with sampling interval disclosed.
 - Publisher/signature metadata where the platform exposes it.
-- Flag suspicious combinations of evidence for review; do not terminate processes.
+- Match known miner executable names and explicit Stratum-plus-pool/account command-line patterns for review; do not terminate processes.
+- Treat a match as a lead, not a verdict: names can be spoofed, miners can be renamed, and legitimate mining applications may match.
 
 ### 3. Startup and persistence
 - Windows: user startup folders, Run/RunOnce keys, scheduled tasks and service metadata where safely queryable.
