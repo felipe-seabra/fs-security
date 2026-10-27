@@ -101,7 +101,9 @@ fn run_read_only_audit() -> AuditReport {
             .collect::<Vec<_>>()
             .join(" ");
 
-        if let Some(evidence) = mining_indicator(&process_name, executable.as_deref(), &command_line) {
+        if let Some(evidence) =
+            mining_indicator(&process_name, executable.as_deref(), &command_line)
+        {
             findings.push(AuditFinding {
                 id: format!("possible-miner-{}", pid.as_u32()),
                 category: "Possible mining software".to_string(),
@@ -163,10 +165,26 @@ fn run_read_only_audit() -> AuditReport {
 
 fn mining_indicator(name: &str, executable: Option<&str>, command_line: &str) -> Option<String> {
     let known_names = [
-        "xmrig", "minerd", "cpuminer", "cpuminer-opt", "lolminer", "t-rex",
-        "trex", "gminer", "nbminer", "phoenixminer", "teamredminer",
-        "nanominer", "wildrig", "rigel", "bminer", "ethminer", "claymore",
-        "srbminer", "cryptodredge", "kawpowminer",
+        "xmrig",
+        "minerd",
+        "cpuminer",
+        "cpuminer-opt",
+        "lolminer",
+        "t-rex",
+        "trex",
+        "gminer",
+        "nbminer",
+        "phoenixminer",
+        "teamredminer",
+        "nanominer",
+        "wildrig",
+        "rigel",
+        "bminer",
+        "ethminer",
+        "claymore",
+        "srbminer",
+        "cryptodredge",
+        "kawpowminer",
     ];
 
     let name_lower = name.to_ascii_lowercase();
@@ -248,7 +266,12 @@ mod tests {
 
     #[test]
     fn does_not_flag_stratum_text_without_mining_arguments() {
-        assert!(mining_indicator("browser", None, "example mentions stratum+tcp:// in a help page").is_none());
+        assert!(mining_indicator(
+            "browser",
+            None,
+            "example mentions stratum+tcp:// in a help page"
+        )
+        .is_none());
     }
 
     #[test]
